@@ -3,7 +3,6 @@ const mysql = require('mysql2/promise');
 
 const pool = mysql.createPool({
     host: 'localhost',    // 本地 MySQL 地址（不变）
-    user: 'root',         // MySQL 用户名（默认 root，根据你的实际情况改）
     password: 'wym',   // MySQL 密码（必须改成你自己的 MySQL 密码）
     database: 'game_db',  // 数据库名（后续会创建）
     connectionLimit: 10,  // 连接池大小（不变）
