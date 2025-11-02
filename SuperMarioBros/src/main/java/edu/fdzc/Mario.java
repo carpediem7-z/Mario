@@ -17,6 +17,8 @@ public class Mario implements Runnable{
     private int index;//索引
     private int upTime=0;//马里奥上升时间
     private boolean isOK;//判断马里奥是否走到城堡门口
+    private boolean isDeath=false;//判断马里奥是否死亡
+    private int score=0;//获得的分数
 
     public Mario(){
 
@@ -28,6 +30,10 @@ public class Mario implements Runnable{
         this.status="stand--right";
         thread=new Thread(this);
         thread.start();
+    }
+    //马里奥死亡方法
+    public void death(){
+        isDeath=true;
     }
     //马里奥向左移动
     public void leftMove(){
@@ -146,6 +152,7 @@ public class Mario implements Runnable{
                 if ((ob.getY() >= this.y - 30 && ob.getY() <= this.y - 20) && (ob.getX() > this.x - 30 && ob.getX() < this.x + 25)) {
                     if (ob.getType() == 0) {
                         backGround.getObstacleList().remove(ob);
+                        score+=1;
                     }
                     upTime = 0;
                 }
@@ -156,6 +163,27 @@ public class Mario implements Runnable{
                 //判断是否能往左走
                 if (ob.getX() == this.x - 30 && (ob.getY() > this.y - 30 && ob.getY() < this.y + 25)) {
                     canLeft = false;
+                }
+            }
+            //判断马里奥是否碰到敌人死亡或者踩死蘑菇敌人
+            for (int i=0;i<backGround.getEnemyList().size();i++){
+                Enemy e=backGround.getEnemyList().get(i);
+
+                if (e.getY()==this.y+20&&(e.getX()- 25<=this.x && e.getX() + 35 >= this.x)) {
+                    if(e.getType()==1){
+                        e.death();
+                        score+=2;
+                        upTime = 3;
+                        ySpeed=-10;
+                    }else if(e.getType()==2){
+                        //马里奥死亡
+                        death();
+                    }
+                }
+
+                if ((e.getX()+35>this.x&&e.getX()-25<this.x)&&(e.getY()+35>this.y&&e.getY()-20<this.y)) {
+                    //马里奥死亡
+                    death();
                 }
             }
             //进行马里奥跳跃动作
@@ -255,5 +283,13 @@ public class Mario implements Runnable{
 
     public boolean isOK() {
         return isOK;
+    }
+
+    public boolean isDeath() {
+        return isDeath;
+    }
+
+    public int getScore() {
+        return score;
     }
 }

@@ -1,9 +1,12 @@
 package edu.fdzc;
 
+import javazoom.jl.decoder.JavaLayerException;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +54,13 @@ public class MyFrame extends JFrame implements KeyListener,Runnable {
         //绘制图像
         repaint();
         thread.start();
+        try {
+            new Music();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (JavaLayerException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
@@ -66,6 +76,10 @@ public class MyFrame extends JFrame implements KeyListener,Runnable {
         graphics.fillRect(0,0,800,600);
         //绘制背景
         graphics.drawImage(nowBg.getBgImage(),0,0,this);
+        //绘制敌人
+        for (Enemy e:nowBg.getEnemyList()){
+            graphics.drawImage(e.getShow(),e.getX(),e.getY(),this);
+        }
         //绘制障碍物
         for (Obstacle ob:nowBg.getObstacleList()){
             graphics.drawImage(ob.getShow(),ob.getX(),ob.getY(),this);
@@ -76,6 +90,12 @@ public class MyFrame extends JFrame implements KeyListener,Runnable {
         graphics.drawImage(nowBg.getGan(),500,220,this);
         //绘制马里奥
         graphics.drawImage(mario.getShow(),mario.getX(),mario.getY(),this);
+        //添加分数
+        Color c=graphics.getColor();
+        graphics.setColor(Color.BLACK);
+        graphics.setFont(new Font("黑体",Font.BOLD,25));
+        graphics.drawString("当前的分数为："+mario.getScore(),300,100);
+        graphics.setColor(c);
         //将图像绘制在窗口中
         g.drawImage(offScreenImage,0,0,this);
     }
@@ -125,6 +145,11 @@ public class MyFrame extends JFrame implements KeyListener,Runnable {
                     mario.setBackGround(nowBg);
                     mario.setX(10);
                     mario.setY(355);
+                }
+                //判断马里奥是否死亡
+                if (mario.isDeath()){
+                    JOptionPane.showMessageDialog(this,"您已死亡！");
+                    System.exit(0);
                 }
                 //判断游戏是否结束
                 if(mario.isOK()){

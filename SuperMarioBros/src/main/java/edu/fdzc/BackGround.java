@@ -16,6 +16,8 @@ public class BackGround {
     private boolean flag;
     //存放所有障碍物
     private List<Obstacle> obstacleList=new ArrayList<>();
+    //存放所有敌人
+    private List<Enemy> enemyList=new ArrayList<>();
     //显示旗杆
     private BufferedImage gan=null;
     //显示城堡
@@ -74,6 +76,10 @@ public class BackGround {
                     obstacleList.add(new Obstacle(645,i,6,this));
                 }
             }
+            //蘑菇敌人
+            enemyList.add(new Enemy(580,385,true,1,this));
+            //食人花敌人
+            enemyList.add(new Enemy(635,420,true,2,328,428,this));
         }
         //第二关
         if(sort==2){
@@ -130,6 +136,14 @@ public class BackGround {
             for(int i=360;i<=540;i+=60){
                 obstacleList.add(new Obstacle(i,270,7,this));
             }
+            //第一个食人花
+            enemyList.add(new Enemy(75,420,true,2,328,418,this));
+            //第二个食人花
+            enemyList.add(new Enemy(635,420,true,2,298,388,this));
+            //第一个蘑菇
+            enemyList.add(new Enemy(200,385,true,1,this));
+            //第二个蘑菇
+            enemyList.add(new Enemy(500,385,true,1,this));
         }
         //第三关
         if(sort==3){
@@ -164,6 +178,8 @@ public class BackGround {
             tower=StaticValue.tower;
             //添加旗子到旗杆上
             obstacleList.add(new Obstacle(515,220,8,this));
+            //蘑菇敌人
+            enemyList.add(new Enemy(150,385,true,1,this));
         }
     }
 
@@ -205,5 +221,9 @@ public class BackGround {
 
     public void setBase(boolean base) {
         isBase = base;
+    }
+
+    public List<Enemy> getEnemyList() {
+        return enemyList;
     }
 }
